@@ -48,7 +48,7 @@ When a signal fires:
 1. Bot writes to `pending_orders.json`
 2. Sends Telegram message with symbol, qty, entry, TP, SL
 3. User taps Approve/Reject on phone
-4. `approval_handler.py` executes or discards
+4. `telegram_bot.py` executes or discards
 
 Set `REQUIRE_APPROVAL=false` in `.env` to trade autonomously (not recommended for live).
 

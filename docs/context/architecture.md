@@ -9,7 +9,7 @@ Alpaca API (data)
     ↓
 main.py (scanner + signal engine)
     ↓ pending_orders.json
-approval_handler.py (Telegram bot, systemd service)
+telegram_bot.py (Telegram bot, systemd service)
     ↓ user approves via Telegram
 IB Gateway :4001 (ib_insync)
     ↓
@@ -28,7 +28,7 @@ Runs at 16:30 ET via cron. Steps:
 7. If signal fires: write to `pending_orders.json`, send Telegram approval request
 8. Disconnect
 
-## approval_handler.py — Order Executor
+## telegram_bot.py — Order Executor
 
 Long-lived systemd service (`approval-handler.service`). Steps:
 1. Polls Telegram for inline button callbacks
@@ -41,7 +41,7 @@ Long-lived systemd service (`approval-handler.service`). Steps:
 | File | Purpose |
 |------|---------|
 | `main.py` | Scanner, signal engine, position manager |
-| `approval_handler.py` | Telegram listener, order executor |
+| `telegram_bot.py` | Telegram listener, order executor |
 | `trades.csv` | Source of truth for bot-managed positions |
 | `pending_orders.json` | Queue between scanner and approval handler |
 | `activity.log` | Full audit log |
@@ -51,7 +51,7 @@ Long-lived systemd service (`approval-handler.service`). Steps:
 ## Connection IDs
 
 - `main.py` uses `clientId=1`
-- `approval_handler.py` uses `clientId=2`
+- `telegram_bot.py` uses `clientId=2`
 - Both connect to `127.0.0.1:4001`
 
 ## Position Safety

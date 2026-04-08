@@ -31,7 +31,7 @@ Note: `pandas-ta` is listed in requirements but **not used** — all indicators 
 ```
 algo-trader/
 ├── main.py                  # Main scanner + position manager
-├── approval_handler.py      # Telegram approval service
+├── telegram_bot.py      # Telegram bot (commands + approvals)
 ├── requirements.txt
 ├── trades.csv               # Open positions log
 ├── .env                     # Secrets (never commit)

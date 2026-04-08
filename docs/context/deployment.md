@@ -68,7 +68,7 @@ OverrideTwsApiPort=4001
 |---------|---------|
 | `ib-gateway.service` | Starts gateway on boot, restarts on crash |
 | `x11vnc.service` | Starts VNC on boot, restarts on crash |
-| `approval-handler.service` | Telegram approval listener |
+| `approval-handler.service` | Telegram bot (commands + approvals) |
 
 ```bash
 sudo systemctl status ib-gateway x11vnc approval-handler
@@ -107,7 +107,7 @@ ALPACA_SECRET_KEY=...
 ```
 ~/algo-trader/
 ├── main.py
-├── approval_handler.py
+├── telegram_bot.py
 ├── trades.csv          # Source of truth for open positions
 ├── pending_orders.json # Pending approval queue
 ├── activity.log        # Audit log
