@@ -96,10 +96,13 @@ IB_GATEWAY_HOST=127.0.0.1
 IB_GATEWAY_PORT=4001
 IB_CLIENT_ID=1
 TELEGRAM_BOT_KEY=...
-TELEGRAM_CHAT_ID=...
+TELEGRAM_CHAT_ID=...           # Your Telegram user ID (admin)
+TELEGRAM_VIEWER_IDS=...        # Comma-separated IDs for read-only viewers (optional)
 REQUIRE_APPROVAL=true
 ALPACA_API_KEY=...
 ALPACA_SECRET_KEY=...
+IB_ACCOUNT=U11801478           # IBKR account number (for /pnl command)
+IB_QUERY_CLIENT_ID=3           # clientId for persistent read-only connection (default: 3)
 ```
 
 ## Bot Directory

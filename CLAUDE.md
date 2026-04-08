@@ -1,6 +1,6 @@
 # algo-trader
 
-> Live IBKR algorithmic trading bot — scans S&P 500 daily after market close, places bracket orders with Telegram approval.
+> Live IBKR algorithmic trading bot — scans S&P 500 daily after market close, places bracket orders with Telegram approval. Telegram bot also provides slash commands for live account queries (/balance, /positions, /pnl, etc.).
 
 ## Quick Reference
 
@@ -40,4 +40,14 @@ ssh -i ~/Downloads/"ssh-key-2026-04-04 (1).key" -L 5900:localhost:5900 -N ubuntu
 **Restart gateway:**
 ```bash
 screen -dmS gateway ~/ibc/start-gateway.sh
+```
+
+**Restart Telegram bot:**
+```bash
+sudo systemctl restart approval-handler
+```
+
+**Add a Telegram viewer (read-only access):**
+```bash
+# Add their chat ID to TELEGRAM_VIEWER_IDS in .env, then restart
 ```

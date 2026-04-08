@@ -28,13 +28,29 @@ Runs at 16:30 ET via cron. Steps:
 7. If signal fires: write to `pending_orders.json`, send Telegram approval request
 8. Disconnect
 
-## telegram_bot.py — Order Executor
+## telegram_bot.py — Telegram Bot & Order Executor
 
-Long-lived systemd service (`approval-handler.service`). Steps:
-1. Polls Telegram for inline button callbacks
+Long-lived systemd service (`approval-handler.service`). Responsibilities:
+
+**Slash commands (always-on, read-only):**
+- `/balance` — account equity, cash, buying power
+- `/positions` — all open positions with live P&L
+- `/orders` — open/pending orders
+- `/pnl` — daily P&L summary
+- `/trades` — today's fills
+- `/status` — gateway connectivity + last scan time
+- `/pending` — trades awaiting approval
+- `/log` — last 15 lines of activity.log (admin only)
+
+**Trade approval flow:**
+1. Polls Telegram for inline button callbacks (long-polling, ~1s latency)
 2. On "Approve": connects to IB Gateway (clientId=2), places bracket order
 3. On "Reject": discards pending order
 4. Logs all activity to `activity.log`
+
+**Access tiers:**
+- Admin (`TELEGRAM_CHAT_ID`): all commands + trade approvals
+- Viewers (`TELEGRAM_VIEWER_IDS`): read-only commands only, no `/log`, no approvals
 
 ## Key Files
 
@@ -50,9 +66,10 @@ Long-lived systemd service (`approval-handler.service`). Steps:
 
 ## Connection IDs
 
-- `main.py` uses `clientId=1`
-- `telegram_bot.py` uses `clientId=2`
-- Both connect to `127.0.0.1:4001`
+- `main.py` uses `clientId=1` (scanner)
+- `telegram_bot.py` uses `clientId=2` (order execution)
+- `telegram_bot.py` uses `clientId=3` (persistent read-only query connection)
+- All connect to `127.0.0.1:4001`
 
 ## Position Safety
 
