@@ -31,7 +31,7 @@ Note: `pandas-ta` is listed in requirements but **not used** — all indicators 
 ```
 algo-trader/
 ├── main.py                  # Main scanner + position manager
-├── telegram_bot.py      # Telegram bot (commands + approvals)
+├── telegram_bot.py          # Telegram bot (commands + approvals)
 ├── requirements.txt
 ├── trades.csv               # Open positions log
 ├── .env                     # Secrets (never commit)
@@ -42,12 +42,18 @@ algo-trader/
 │   ├── context/             # This documentation
 │   └── plans/               # Implementation plans
 └── scripts/
-    ├── health_check.sh      # Gateway health check (runs on VM)
-    ├── get_sp500.py
-    ├── test_ibkr_connection.py
-    ├── test_buy.py
-    └── test_brackets.py
+    ├── health_check.sh          # Gateway health check (runs on VM)
+    ├── get_sp500.py             # Fetch top 50 S&P 500 tickers by market cap
+    ├── test_ibkr_connection.py  # Verify IB Gateway connectivity
+    ├── test_buy.py              # Test IBKR market buy
+    ├── test_brackets.py         # Test IBKR bracket order
+    ├── test_cancel.py           # Cancel all open Alpaca paper orders
+    ├── bot.py                   # Print Alpaca paper account info (balance, equity)
+    ├── get_manual_levels.py     # Calc TP/SL for Alpaca paper positions (BB upper + 10% SL)
+    └── apply_protection.py      # Place OCO orders on Alpaca paper positions
 ```
+
+> **Note on scripts/**: Files prefixed with `test_` or named `bot.py`, `get_manual_levels.py`, `apply_protection.py` target the **Alpaca paper trading API** (`paper-api.alpaca.markets`), not the live IBKR account. They are local dev/debugging tools only.
 
 ## Local vs VM
 
@@ -64,4 +70,4 @@ scp -i ~/Downloads/"ssh-key-2026-04-04 (1).key" main.py ubuntu@129.159.139.113:~
 ```
 
 ---
-Last updated: 2026-04-08
+Last updated: 2026-04-09

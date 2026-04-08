@@ -223,7 +223,7 @@ def query_positions() -> str:
 def query_orders() -> str:
     try:
         ensure_connected()
-        trades = ib_query.openTrades()
+        trades = ib_query.reqAllOpenOrders()
         if not trades:
             return "📋 No open orders."
         lines = ["📋 <b>Open Orders</b>\n"]
@@ -232,7 +232,7 @@ def query_orders() -> str:
             action = t.order.action
             qty    = t.order.totalQuantity
             otype  = t.order.orderType
-            lmt    = f"@ ${t.order.lmtPrice:.2f}" if t.order.lmtPrice else ""
+            lmt    = f"@ ${t.order.lmtPrice:.2f}" if t.order.lmtPrice else (f"@ ${t.order.auxPrice:.2f}" if t.order.auxPrice else "")
             status = t.orderStatus.status
             lines.append(f"<b>{sym}</b>: {action} {qty:.0f} {otype} {lmt} [{status}]")
         return "\n".join(lines)
