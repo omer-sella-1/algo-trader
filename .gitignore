@@ -1,0 +1,8 @@
+.env
+*.log
+trades.csv
+pending_orders.json
+__pycache__/
+*.pyc
+.venv/
+.idea/
