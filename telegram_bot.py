@@ -7,6 +7,7 @@ import os
 import json
 import time
 import socket
+import subprocess
 import requests
 from datetime import datetime
 from dotenv import load_dotenv
@@ -64,7 +65,8 @@ VIEWER_COMMANDS = [
 ]
 
 ADMIN_EXTRA_COMMANDS = [
-    {"command": "log", "description": "Last 15 lines of activity log (admin only)"},
+    {"command": "log",             "description": "Last 15 lines of activity log (admin only)"},
+    {"command": "restart_gateway", "description": "Restart IB Gateway service (admin only)"},
 ]
 
 
@@ -350,6 +352,24 @@ def reply_to(chat_id: str, message: str):
         pass
 
 
+def restart_gateway() -> str:
+    try:
+        result = subprocess.run(
+            ["sudo", "systemctl", "restart", "ib-gateway"],
+            capture_output=True, text=True, timeout=15
+        )
+        if result.returncode == 0:
+            log("🔄 Gateway restart triggered via Telegram")
+            return "🔄 <b>Gateway restart triggered.</b>\nApprove the IBKR Mobile 2FA push if prompted. Use /status in ~30s to confirm."
+        else:
+            log(f"❌ Gateway restart failed: {result.stderr.strip()}")
+            return f"❌ Restart failed:\n<pre>{result.stderr.strip()}</pre>"
+    except subprocess.TimeoutExpired:
+        return "❌ Restart command timed out."
+    except Exception as e:
+        return f"❌ Restart error: {e}"
+
+
 def handle_command(text: str, from_id: str) -> str:
     if not is_allowed(from_id):
         return "🚫 You are not authorized to use this bot."
@@ -374,6 +394,10 @@ def handle_command(text: str, from_id: str) -> str:
         if not is_admin(from_id):
             return "🚫 /log is restricted to the admin."
         return query_log()
+    elif cmd == "/restart_gateway":
+        if not is_admin(from_id):
+            return "🚫 /restart_gateway is restricted to the admin."
+        return restart_gateway()
     return None
 
 
